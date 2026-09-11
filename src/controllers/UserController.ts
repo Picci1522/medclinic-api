@@ -13,14 +13,4 @@ export class UserController {
       next(error);
     }
   }
-
-  async login(req: Request, res: Response, next: NextFunction) {
-    try {
-      const result = await userService.login(req.body);
-      res.status(200).json(result);
-    } catch (error) {
-      // Repassa o erro para o errorMiddleware
-      next(error);
-    }
-  }
 }
