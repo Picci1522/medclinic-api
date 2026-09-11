@@ -1,15 +1,18 @@
-### 1. Exemplo de requisição GET (Buscar dados)
-# Como ainda não criamos a rota de buscar usuários no código, isso vai dar erro 404 por enquanto, mas é assim que se faz:
-GET http://localhost:3000/users
-
-
-### 2. Requisição POST (Criar Usuário - ETAPA 06)
-# É esta que precisamos testar agora!
+### 1. Criar Usuário (Caso ainda não tenha o João criado)
 POST http://localhost:3000/users
 Content-Type: application/json
 
 {
   "name": "João Silva",
+  "email": "joao@email.com",
+  "password": "senhaSuperSecreta123"
+}
+
+### 2. Fazer Login e Receber o Token JWT
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
   "email": "joao@email.com",
   "password": "senhaSuperSecreta123"
 }
