@@ -1,14 +1,5 @@
-### 1. Criar Usuário (Caso ainda não tenha o João criado)
-POST http://localhost:3000/users
-Content-Type: application/json
-
-{
-  "name": "João Silva",
-  "email": "joao@email.com",
-  "password": "senhaSuperSecreta123"
-}
-
-### 2. Fazer Login e Receber o Token JWT
+### 1. Fazer Login e Capturar Token
+# @name login
 POST http://localhost:3000/login
 Content-Type: application/json
 
@@ -16,3 +7,20 @@ Content-Type: application/json
   "email": "joao@email.com",
   "password": "senhaSuperSecreta123"
 }
+
+### Guardando o token retornado
+@token = {{login.response.body.token}}
+
+
+### 2. Testar Rota Protegida SEM Token (Deve retornar 401)
+GET http://localhost:3000/profile
+
+
+### 3. Testar Rota Protegida COM Token (Deve retornar 200 OK)
+GET http://localhost:3000/profile
+Authorization: Bearer {{token}}
+
+
+### 4. Testar Rota ADMIN com perfil ATTENDANT (Deve retornar 403 Acesso Negado)
+GET http://localhost:3000/admin
+Authorization: Bearer {{token}}
