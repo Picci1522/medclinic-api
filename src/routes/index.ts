@@ -6,24 +6,29 @@ import { roleMiddleware } from '../middlewares/roleMiddleware';
 const routes = Router();
 const userController = new UserController();
 
-// Rotas públicas
+// Rotas públicas (Cadastro e Login)
 routes.post('/users', userController.create);
 routes.post('/login', userController.login);
 
-// Rota protegida por JWT (Autenticação)
-routes.get('/profile', authMiddleware, (req: Request, res: Response) => {
+// RF10: Rota para retornar os dados do usuário logado
+routes.get('/users/me', authMiddleware, (req: Request, res: Response) => {
   res.json({
-    message: 'Acesso autorizado',
+    message: 'Dados do usuário autenticado',
     userId: (req as any).userId,
-    userRole: (req as any).userRole
+    userRole: (req as any).userRole,
   });
 });
 
-// Rota protegida por perfil (RBAC) - Apenas ADMIN
-routes.get('/admin', authMiddleware, roleMiddleware(['ADMIN']), (req: Request, res: Response) => {
-  res.json({
-    message: 'Painel administrativo acessado com sucesso'
-  });
-});
+// RF10: Rota protegida, exclusiva para o perfil Administrador (Demonstra o RBAC)
+routes.get(
+  '/admin/ping',
+  authMiddleware,
+  roleMiddleware(['ADMIN']),
+  (req: Request, res: Response) => {
+    res.json({
+      message: 'Pong! Acesso autorizado ao painel de administração.',
+    });
+  }
+);
 
 export default routes;
