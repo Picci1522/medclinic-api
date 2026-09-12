@@ -1,7 +1,7 @@
 {
   "name": "medclinic-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "API para o gerenciamento de uma clínica médica de pequeno porte.",
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
@@ -9,7 +9,7 @@
     "start": "node dist/server.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "Willian Piccinin",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^6.0.0",
