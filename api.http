@@ -1,0 +1,33 @@
+### 1. Fazer Login
+# @name login
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+  "email": "joao@email.com",
+  "password": "senhaSuperSecreta123"
+}
+
+### Guardando o token
+@token = {{login.response.body.token}}
+
+
+### 2. Testar RF10 (Retorna dados do usuário autenticado)
+GET http://localhost:3000/users/me
+Authorization: Bearer {{token}}
+
+
+### 3. Testar RF10 (Testar RBAC - Deve dar acesso negado 403)
+GET http://localhost:3000/admin/ping
+Authorization: Bearer {{token}}
+
+
+### 4. Testar Tratamento de Erros RF12 (Criar com email repetido, deve retornar status 409)
+POST http://localhost:3000/users
+Content-Type: application/json
+
+{
+  "name": "João Silva",
+  "email": "joao@email.com",
+  "password": "senhaSuperSecreta123"
+}
