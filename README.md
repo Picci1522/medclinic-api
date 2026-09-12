@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-# medclinic-api-
 =======
 # 🏥 MedClinic API - Autenticação e Autorização
 
