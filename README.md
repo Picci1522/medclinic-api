@@ -41,7 +41,7 @@ Antes de iniciar o projeto, certifique-se de possuir:
 ### 1. Clonar o repositório e instale as dependências
 
 ```bash
-git clone https://github.com/Picci1522/medclinic-api-.git
+git clone https://github.com/Picci1522/medclinic-api.git
 cd medclinic-api
 npm install
 ```
