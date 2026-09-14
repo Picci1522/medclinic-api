@@ -1,11 +1,11 @@
-=======
 #  MedClinic API - Autenticação e Autorização
 
 ##  Descrição e Escopo
 
 A **MedClinic API** é um sistema de gerenciamento para uma clínica médica.
 
-Esta é a **Etapa 1** do projeto: construção da base de **autenticação e autorização** do sistema. As funcionalidades de gerenciamento de especialidades, médicos, pacientes e consultas serão implementadas em uma etapa futura, sobre esta mesma base de código.
+Esta é a **etapa inicial** (base de autenticação e autorização) da MedClinic API, um sistema para gerenciamento de clínica médica. As funcionalidades de domínio (especialidades, médicos, pacientes e consultas) não fazem parte desta entrega e serão implementadas futuramente.
+
 ---
 
 ##  Tecnologias Utilizadas
@@ -33,10 +33,6 @@ Antes de iniciar o projeto, certifique-se de possuir:
 - Git instalado
 
 ---
-
-## Configuração do ambiente
-
-
 
 ### 1. Clonar o repositório e instale as dependências
 
@@ -115,7 +111,45 @@ Configuração do DataSource e conexão com PostgreSQL.
 Funções utilitárias, DTOs e tipagens auxiliares.
 
 ---
+## Perfis de Acesso (RBAC)
+O sistema possui controle de acesso baseado em perfis (Role-Based Access Control):
+- **ADMIN:** Acesso completo a todas as funcionalidades da API.
+- **ATENDENTE:** Acesso operacional, com permissões restritas. (Tentativas de acesso a rotas de administrador retornarão Erro HTTP 403 - Forbidden).
 
+## Documentação dos Endpoints
+
+| Método | Rota | Descrição | Autenticação | Status Esperados |
+|---|---|---|---|---|
+| `POST` | `/auth/register` | Cadastro de novo usuário | Não | 201, 400, 409 |
+| `POST` | `/auth/login` | Login e emissão de JWT | Não | 200, 400, 401 |
+| `GET` | `/users/me` | Retorna dados do usuário autenticado | Sim (Qualquer) | 200, 401, 404 |
+| `GET` | `/admin/ping` | Rota de teste para administradores | Sim (Admin) | 200, 401, 403 |
+
+### Exemplos de Requisição (Payload)
+
+**POST `/auth/register`**
+```json
+{
+  "nome": "João Silva",
+  "email": "joao@email.com",
+  "senha": "senha_segura_123",
+  "role": "ATENDENTE"
+}
+```
+
+**POST `/auth/login`**
+```json
+{
+  "email": "joao@email.com",
+  "senha": "senha_segura_123"
+}
+```
+*Exemplo de Resposta (200 OK):*
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
 ##  Fluxo de Segurança
 
 ```text
