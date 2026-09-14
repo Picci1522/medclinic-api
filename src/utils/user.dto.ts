@@ -1,4 +1,3 @@
-// Define o formato esperado quando o usuário enviar dados para cadastro
 export interface CreateUserDTO {
   name: string;
   email: string;
@@ -6,13 +5,13 @@ export interface CreateUserDTO {
   role?: string; 
 }
 
-// Define o formato esperado quando o usuário tentar fazer login
+
 export interface LoginDTO {
   email: string;
   password: string;
 }
 
-// Define o formato seguro que devolveremos (NUNCA devolvemos a senha)
+
 export interface UserResponseDTO {
   id: string;
   name: string;

@@ -29,7 +29,7 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction) 
     const secret = process.env.JWT_SECRET || 'fallback_secret';
     const decoded = jwt.verify(token, secret) as TokenPayload;
 
-    // Anexa os dados extraídos do token diretamente no objeto de requisição (sem necessidade de @types)
+  
     (req as any).userId = decoded.id;
     (req as any).userRole = decoded.role;
 

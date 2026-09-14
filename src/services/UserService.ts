@@ -3,7 +3,7 @@ import { CreateUserDTO, UserResponseDTO } from '../utils/user.dto';
 import bcrypt from 'bcrypt';
 
 export class UserService {
-  // 1. Método para cadastrar usuário
+  
   async createUser(data: CreateUserDTO): Promise<UserResponseDTO> {
     const { name, email, password, role } = data;
 

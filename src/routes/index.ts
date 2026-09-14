@@ -8,11 +8,11 @@ const routes = Router();
 const userController = new UserController();
 const authController = new AuthController();
 
-// Rotas públicas
+
 routes.post('/users', userController.create);
 routes.post('/login', authController.login);
 
-// Rotas protegidas (RF10)
+
 routes.get('/users/me', authMiddleware, (req: Request, res: Response) => {
   res.json({
     message: 'Dados do usuário autenticado',

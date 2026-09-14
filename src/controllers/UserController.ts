@@ -9,7 +9,7 @@ export class UserController {
       const user = await userService.createUser(req.body);
       res.status(201).json(user);
     } catch (error) {
-      // Repassa o erro para o errorMiddleware
+     
       next(error);
     }
   }
