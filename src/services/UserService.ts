@@ -3,9 +3,8 @@ import { CreateUserDTO, UserResponseDTO } from '../utils/user.dto';
 import bcrypt from 'bcrypt';
 
 export class UserService {
-  
   async createUser(data: CreateUserDTO): Promise<UserResponseDTO> {
-    const { name, email, password, role } = data;
+    const { name, email, password } = data;
 
     const userExists = await UserRepository.findOneBy({ email });
     if (userExists) {
@@ -18,7 +17,7 @@ export class UserService {
       name,
       email,
       password: hashedPassword,
-      role: role || 'ATTENDANT',
+      role: 'ATTENDANT',
     });
     await UserRepository.save(newUser);
 
