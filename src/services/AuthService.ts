@@ -2,6 +2,7 @@ import { UserRepository } from '../repositories/UserRepository';
 import { LoginDTO } from '../utils/user.dto';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import { JWT_SECRET, JWT_EXPIRES_IN } from '../config/env';
 
 export class AuthService {
   async login(data: LoginDTO) {
@@ -17,11 +18,10 @@ export class AuthService {
       throw new Error('E-mail ou senha incorretos.');
     }
 
-    const secret = process.env.JWT_SECRET || 'fallback_secret';
     const token = jwt.sign(
       { id: user.id, role: user.role },
-      secret,
-      { expiresIn: '1d' }
+      JWT_SECRET,
+      { expiresIn: JWT_EXPIRES_IN as jwt.SignOptions['expiresIn'] }
     );
 
     return {
