@@ -8,10 +8,8 @@ const routes = Router();
 const userController = new UserController();
 const authController = new AuthController();
 
-
-routes.post('/users', userController.create);
-routes.post('/login', authController.login);
-
+routes.post('/auth/register', userController.create);
+routes.post('/auth/login', authController.login);
 
 routes.get('/users/me', authMiddleware, (req: Request, res: Response) => {
   res.json({
