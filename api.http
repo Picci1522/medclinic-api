@@ -9,12 +9,13 @@ Content-Type: application/json
 }
 
 ### Guardando o token
+
 @token = {{login.response.body.token}}
 
 
 ### 2. Testar RF10 (Retorna dados do usuário autenticado)
 GET http://localhost:3000/users/me
-Authorization: Bearer {{token}}
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImQxZWVjNGZhLTE2Y2MtNDI3OC1iYmQ5LTU1YzAyZDBiZWFhMCIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc4OTQzOTQ0NSwiZXhwIjoxNzg5NTI1ODQ1fQ.G_77a_R8oEbLV_aiApJ1RbCIogckt2Bl2LNsEPTZQcY
 
 
 ### 3. Testar RF10 (Testar RBAC - Deve dar acesso negado 403)
@@ -61,6 +62,16 @@ Content-Type: application/json
 
 {
   "name": "Admin Clinica",
+  "email": "admin@medclinic.com",
+  "password": "senhaAdmin123"
+}
+
+###
+
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
   "email": "admin@medclinic.com",
   "password": "senhaAdmin123"
 }
