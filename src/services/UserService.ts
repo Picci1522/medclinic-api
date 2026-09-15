@@ -1,6 +1,7 @@
 import { UserRepository } from '../repositories/UserRepository';
 import { CreateUserDTO, UserResponseDTO } from '../utils/user.dto';
 import bcrypt from 'bcrypt';
+import { ConflictError, NotFoundError } from '../errors/AppError';
 
 export class UserService {
   async createUser(data: CreateUserDTO): Promise<UserResponseDTO> {
@@ -8,7 +9,7 @@ export class UserService {
 
     const userExists = await UserRepository.findOneBy({ email });
     if (userExists) {
-      throw new Error('E-mail já cadastrado.');
+      throw new ConflictError('E-mail já cadastrado.');
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -33,7 +34,7 @@ export class UserService {
   async getById(id: string): Promise<UserResponseDTO> {
     const user = await UserRepository.findOneBy({ id });
     if (!user) {
-      throw new Error('Usuário não encontrado.');
+      throw new NotFoundError('Usuário não encontrado.');
     }
     return {
       id: user.id,

@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { AppError } from '../errors/AppError';
 
 export function errorMiddleware(
   err: Error,
@@ -8,16 +9,9 @@ export function errorMiddleware(
 ) {
   console.error(`[Erro]: ${err.message}`);
 
-  
-  if (err.message === 'E-mail já cadastrado.') {
-    return res.status(409).json({ error: err.message });
+  if (err instanceof AppError) {
+    return res.status(err.statusCode).json({ error: err.message });
   }
 
-  
-  if (err.message === 'E-mail ou senha incorretos.') {
-    return res.status(401).json({ error: err.message });
-  }
-
-  
-  return res.status(400).json({ error: err.message || 'Erro interno no servidor' });
+  return res.status(500).json({ error: 'Erro interno no servidor' });
 }
