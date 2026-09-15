@@ -29,4 +29,18 @@ export class UserService {
       createdAt: newUser.createdAt,
     };
   }
+
+  async getById(id: string): Promise<UserResponseDTO> {
+    const user = await UserRepository.findOneBy({ id });
+    if (!user) {
+      throw new Error('Usuário não encontrado.');
+    }
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      createdAt: user.createdAt,
+    };
+  }
 }

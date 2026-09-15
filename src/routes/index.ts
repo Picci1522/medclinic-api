@@ -1,4 +1,4 @@
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import { UserController } from '../controllers/UserController';
 import { AuthController } from '../controllers/AuthController';
 import { authMiddleware } from '../middlewares/authMiddleware';
@@ -11,19 +11,13 @@ const authController = new AuthController();
 routes.post('/auth/register', userController.create);
 routes.post('/auth/login', authController.login);
 
-routes.get('/users/me', authMiddleware, (req: Request, res: Response) => {
-  res.json({
-    message: 'Dados do usuário autenticado',
-    userId: (req as any).userId,
-    userRole: (req as any).userRole,
-  });
-});
+routes.get('/users/me', authMiddleware, userController.me);
 
 routes.get(
   '/admin/ping',
   authMiddleware,
   roleMiddleware(['ADMIN']),
-  (req: Request, res: Response) => {
+  (req, res) => {
     res.json({
       message: 'Pong! Acesso autorizado ao painel de administração.',
     });

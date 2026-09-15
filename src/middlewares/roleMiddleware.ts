@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 
 export function roleMiddleware(rolesPermitidas: string[]) {
   return (req: Request, res: Response, next: NextFunction) => {
-    const userRole = (req as any).userRole;
+    const userRole = req.userRole;
 
     if (!userRole) {
       return res.status(401).json({ error: 'Usuário não autenticado' });
