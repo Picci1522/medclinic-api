@@ -3,53 +3,66 @@ import { CreateUserDTO, UserResponseDTO } from '../utils/user.dto';
 import bcrypt from 'bcrypt';
 import { ConflictError, NotFoundError, BadRequestError } from '../errors/AppError';
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
 export class UserService {
-  async createUser(data: CreateUserDTO): Promise<UserResponseDTO> {
+  private readonly repository = UserRepository;
+  private readonly EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  private readonly SALT_ROUNDS = 10;
+  private readonly MIN_PASSWORD_LENGTH = 6;
+
+  public async createUser(data: CreateUserDTO): Promise<UserResponseDTO> {
     const { name, email, password } = data;
 
-    if (!name || !email || !password) {
-      throw new BadRequestError('Os campos name, email e password são obrigatórios.');
-    }
+    this.validateUserData(name, email, password);
 
-    if (!EMAIL_REGEX.test(email)) {
-      throw new BadRequestError('Formato de e-mail inválido.');
-    }
-
-    if (password.length < 6) {
-      throw new BadRequestError('A senha deve ter no mínimo 6 caracteres.');
-    }
-
-    const userExists = await UserRepository.findOneBy({ email });
+    const userExists = await this.repository.findOneBy({ email });
     if (userExists) {
       throw new ConflictError('E-mail já cadastrado.');
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, this.SALT_ROUNDS);
 
-    const newUser = UserRepository.create({
+    const newUser = this.repository.create({
       name,
       email,
       password: hashedPassword,
       role: 'ATTENDANT',
     });
-    await UserRepository.save(newUser);
+    await this.repository.save(newUser);
 
-    return {
-      id: newUser.id,
-      name: newUser.name,
-      email: newUser.email,
-      role: newUser.role,
-      createdAt: newUser.createdAt,
-    };
+    return this.toResponseDTO(newUser);
   }
 
-  async getById(id: string): Promise<UserResponseDTO> {
-    const user = await UserRepository.findOneBy({ id });
+  public async getById(id: string): Promise<UserResponseDTO> {
+    const user = await this.repository.findOneBy({ id });
     if (!user) {
       throw new NotFoundError('Usuário não encontrado.');
     }
+    return this.toResponseDTO(user);
+  }
+
+  private validateUserData(name: string, email: string, password: string): void {
+    if (!name || !email || !password) {
+      throw new BadRequestError('Os campos name, email e password são obrigatórios.');
+    }
+
+    if (!this.EMAIL_REGEX.test(email)) {
+      throw new BadRequestError('Formato de e-mail inválido.');
+    }
+
+    if (password.length < this.MIN_PASSWORD_LENGTH) {
+      throw new BadRequestError(
+        `A senha deve ter no mínimo ${this.MIN_PASSWORD_LENGTH} caracteres.`
+      );
+    }
+  }
+
+  private toResponseDTO(user: {
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+    createdAt: Date;
+  }): UserResponseDTO {
     return {
       id: user.id,
       name: user.name,
