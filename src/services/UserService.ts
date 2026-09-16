@@ -1,11 +1,25 @@
 import { UserRepository } from '../repositories/UserRepository';
 import { CreateUserDTO, UserResponseDTO } from '../utils/user.dto';
 import bcrypt from 'bcrypt';
-import { ConflictError, NotFoundError } from '../errors/AppError';
+import { ConflictError, NotFoundError, BadRequestError } from '../errors/AppError';
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export class UserService {
   async createUser(data: CreateUserDTO): Promise<UserResponseDTO> {
     const { name, email, password } = data;
+
+    if (!name || !email || !password) {
+      throw new BadRequestError('Os campos name, email e password são obrigatórios.');
+    }
+
+    if (!EMAIL_REGEX.test(email)) {
+      throw new BadRequestError('Formato de e-mail inválido.');
+    }
+
+    if (password.length < 6) {
+      throw new BadRequestError('A senha deve ter no mínimo 6 caracteres.');
+    }
 
     const userExists = await UserRepository.findOneBy({ email });
     if (userExists) {
