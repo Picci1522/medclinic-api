@@ -3,11 +3,14 @@
   "version": "1.0.0",
   "description": "API para o gerenciamento de uma clínica médica de pequeno porte.",
   "main": "index.js",
-  "scripts": {
-    "dev": "tsx watch src/server.ts",
-    "build": "tsc",
-    "start": "node dist/server.js"
-  },
+ "scripts": {
+  "dev": "tsx watch src/server.ts",
+  "build": "tsc",
+  "start": "node dist/server.js",
+  "migration:generate": "typeorm-ts-node-commonjs migration:generate -d src/database/data-source.ts",
+  "migration:create": "typeorm-ts-node-commonjs migration:create",
+  "migration:run": "typeorm-ts-node-commonjs migration:run -d src/database/data-source.ts"
+},
   "keywords": [],
   "author": "Willian Piccinin",
   "license": "ISC",
@@ -27,6 +30,7 @@
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.5.5",
+    "ts-node": "^10.9.2",
     "tsx": "^4.19.1",
     "typescript": "^5.6.2"
   }
